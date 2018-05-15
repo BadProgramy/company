@@ -1,4 +1,4 @@
-package organizational.regular.structure.company;
+package organizational;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

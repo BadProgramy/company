@@ -1,4 +1,4 @@
-package organizational.regular.structure.company.model;
+package organizational.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package organizational.regular.structure.company.model.exception;
+package organizational.model.exception;
 
 public class DataFormatException extends Exception {
     private static final String message = "Неправильно указана дата: ";

@@ -1,4 +1,4 @@
-package organizational.regular.structure.company.model.exception;
+package organizational.model.exception;
 
 public class FormatException extends Exception {
     private static final String message = "Неправильный формат ввода: ";
