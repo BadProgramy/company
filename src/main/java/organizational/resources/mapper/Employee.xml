@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Employee">
+    <resultMap id="result" type="Employee">
+        <result property="id" column="id"/>
+        <result property="idPost" column="idPost"/>
+        <result property="firstName" column="firstName"/>
+        <result property="secondName" column="secondName"/>
+        <result property="thirdName" column="thirdName"/>
+        <result property="floor" column="floor"/>
+        <result property="birthDate" column="birthDate"/>
+        <result property="contactNumber" column="contactNumber"/>
+        <result property="email" column="email"/>
+        <result property="reception" column="reception"/>
+        <result property="layoff" column="layoff"/>
+        <result property="salary" column="salary"/>
+        <result property="head" column="head"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="Employee" keyProperty="id">
+        INSERT INTO employee (id,idpost,firstname,secondname,floor,birthdate,contactnumber,email,reception,salary,head)
+         VALUES (nextval('nextIdEmployee'),#{idPost},#{firstName},#{secondName},#{floor},
+         #{birthDate},#{contactNumber},#{email},#{reception},#{salary},#{head});
+    </insert>
+
+    <select id="selectAll" resultMap="result">
+        SELECT * FROM employee;
+    </select>
+
+</mapper>
