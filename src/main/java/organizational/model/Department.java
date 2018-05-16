@@ -7,26 +7,26 @@ import java.util.List;
 public class Department {
     private int id;
     private String name;
-    private LocalDate date;
+    private LocalDate dateCreation;
     private int idParentDepartment;
-    private int level;
-    private List<Employee> employees;
-    private static final int DEFAULT_HEAD_LEVEL = 1;
+    private List<Integer> idEmployees;
 
-    public Department(String name, LocalDate date, int idParentDepartment, int level) {
+    public Department(String name, LocalDate dateCreation, int idParentDepartment) {
         this.name = name;
-        this.date = date;
+        this.dateCreation = dateCreation;
         this.idParentDepartment = idParentDepartment;
-        this.level = level;
-        employees = new ArrayList<>();
+        idEmployees = new ArrayList<>();
     }
 
-    public Department(String name, LocalDate date) {
+    public Department(String name, LocalDate dateCreation) {
         this.name = name;
-        this.date = date;
+        this.dateCreation = dateCreation;
         idParentDepartment = id;
-        level = DEFAULT_HEAD_LEVEL;
-        employees = new ArrayList<>();
+        idEmployees = new ArrayList<>();
+    }
+
+    public int[] getIdEmployeesToArray(){
+        return idEmployees.stream().mapToInt(i -> i).toArray();
     }
 
     public int getId() {
@@ -45,12 +45,12 @@ public class Department {
         this.name = name;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getDateCreation() {
+        return dateCreation;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDateCreation(LocalDate dateCreation) {
+        this.dateCreation = dateCreation;
     }
 
     public int getIdParentDepartment() {
@@ -61,19 +61,11 @@ public class Department {
         this.idParentDepartment = idParentDepartment;
     }
 
-    public int getLevel() {
-        return level;
+    public List<Integer> getIdEmployees() {
+        return idEmployees;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public List<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
+    public void setIdEmployees(List<Integer> idEmployees) {
+        this.idEmployees = idEmployees;
     }
 }

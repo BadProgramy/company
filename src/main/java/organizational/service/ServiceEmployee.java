@@ -16,7 +16,7 @@ public class ServiceEmployee implements EmployeeDAO{
     private Factory factory;
 
     @Override
-    public int insert(Employee employee) throws Exception {
+    public int insert(Employee employee) {
         int id = -1;
         SqlSession session = factory.getFactory().openSession();
         try {
@@ -30,7 +30,7 @@ public class ServiceEmployee implements EmployeeDAO{
     }
 
     @Override
-    public List<Employee> getAllEmployee() throws Exception {
+    public List<Employee> getAllEmployee(){
         List<Employee> employees;
         SqlSession session = factory.getFactory().openSession();
         try {

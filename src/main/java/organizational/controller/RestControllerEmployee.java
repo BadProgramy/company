@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import organizational.model.Employee;
+import organizational.service.EmployeeDAO;
 import organizational.service.ServiceEmployee;
 
 import java.time.LocalDate;
@@ -15,15 +16,17 @@ public class RestControllerEmployee {
     @Autowired
     private ServiceEmployee serviceEmployee;
 
-    @GetMapping("/persons")
+    @Autowired
+    private EmployeeDAO employeeDAO;
+
+    @GetMapping("/employees")
     public List<Employee> getAllEmployee() throws Exception {
-        return serviceEmployee.getAllEmployee();
+        return employeeDAO.getAllEmployee();
+        //return serviceEmployee.getAllEmployee();
     }
 
-    @GetMapping("/get")
+    @GetMapping("/addEmployee")
     public int addEmployee(Employee employee) throws Exception {
-        //Employee employee = new Employee("1", "2", "ж", LocalDate.now(), "2", "2", LocalDate.now(), 2, false);
-        //employee.setIdPost(1);
         return serviceEmployee.insert(employee);
     }
 }

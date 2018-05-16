@@ -29,5 +29,4 @@
     <select id="selectAll" resultMap="result">
         SELECT * FROM employee;
     </select>
-
 </mapper>
