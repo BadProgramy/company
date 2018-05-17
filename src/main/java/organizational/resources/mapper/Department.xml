@@ -7,18 +7,35 @@
     <resultMap id="result" type="Department">
         <result property="id" column="id"/>
         <result property="idParentDepartment" column="idParentDepartment"/>
-        <result property="name" column="firstName"/>
-        <result property="dateCreation" column="secondName"/>
-        <result property="idParentDepartment" column="idParentDepartment"/>
+        <result property="name" column="name"/>
+        <result property="dateCreation" column="dateCreation"/>
+        <result property="idEmployees" column="idEmployees"/>
     </resultMap>
 
-    <insert id="insert" parameterType="Employee" keyProperty="id">
-        INSERT INTO employee (id,idpost,firstname,secondname,floor,birthdate,contactnumber,email,reception,salary,head)
-         VALUES (nextval('nextIdEmployee'),#{idPost},#{firstName},#{secondName},#{floor},
-         #{birthDate},#{contactNumber},#{email},#{reception},#{salary},#{head});
+    <!-- , string_to_array(#{idEmployees},',', '*')::int[] -->
+    <insert id="insert" parameterType="Department" keyProperty="id">
+        INSERT INTO department (id,idparentdepartment,name,datecreation)
+         VALUES (nextval('nextiddepartment'),#{idParentDepartment},#{name},#{dateCreation});
+    </insert>
+
+    <insert id="insertHead" parameterType="Department" keyProperty="id">
+        INSERT INTO department (id,idparentdepartment,name,datecreation)
+         VALUES (nextval('nextiddepartment'),NULL,#{name},#{dateCreation});
     </insert>
 
     <select id="selectAll" resultMap="result">
-        SELECT * FROM employee;
+        SELECT id, idparentdepartment, name, dateCreation, array_to_string(idEmployees, ',', '*') AS idemployees FROM department;
+    </select>
+    
+    <update id="updateName" parameterType="Department">
+        UPDATE department SET name = #{name} WHERE id = #{id};
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM department WHERE id = #{id};
+    </delete>
+
+    <select id="selectById" parameterType="int" resultMap="result">
+        SELECT * FROM department WHERE id = #{id};
     </select>
 </mapper>

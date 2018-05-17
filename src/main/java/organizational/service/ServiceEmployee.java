@@ -41,6 +41,17 @@ public class ServiceEmployee implements EmployeeDAO{
         return employees;
     }
 
+    public Employee findEmployeeById(int id) {
+        SqlSession session = factory.getFactory().openSession();
+        Employee employee;
+        try {
+            employee = session.selectOne("Employee.selectById",id);
+        } finally {
+            session.close();
+        }
+        return employee;
+    }
+
     public Factory getFactory() {
         return factory;
     }

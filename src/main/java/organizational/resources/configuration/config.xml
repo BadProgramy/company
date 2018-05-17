@@ -6,9 +6,11 @@
 <configuration>
     <typeAliases>
         <typeAlias alias="Employee" type="organizational.model.Employee"/>
+        <typeAlias alias="Department" type="organizational.model.Department"/>
     </typeAliases>
 
     <mappers>
         <mapper resource="organizational/resources/mapper/Employee.xml"/>
+        <mapper resource="organizational/resources/mapper/Department.xml"/>
     </mappers>
 </configuration>

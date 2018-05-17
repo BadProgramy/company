@@ -29,4 +29,8 @@
     <select id="selectAll" resultMap="result">
         SELECT * FROM employee;
     </select>
+
+    <select id="selectById" parameterType="int" resultMap="result">
+        SELECT * FROM employee WHERE id = #{id};
+    </select>
 </mapper>

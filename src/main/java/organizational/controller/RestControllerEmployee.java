@@ -16,17 +16,14 @@ public class RestControllerEmployee {
     @Autowired
     private ServiceEmployee serviceEmployee;
 
-    @Autowired
-    private EmployeeDAO employeeDAO;
 
     @GetMapping("/employees")
-    public List<Employee> getAllEmployee() throws Exception {
-        return employeeDAO.getAllEmployee();
-        //return serviceEmployee.getAllEmployee();
+    public List<Employee> getAllEmployee(){
+        return serviceEmployee.getAllEmployee();
     }
 
     @GetMapping("/addEmployee")
-    public int addEmployee(Employee employee) throws Exception {
+    public int addEmployee(Employee employee){
         return serviceEmployee.insert(employee);
     }
 }
