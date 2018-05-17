@@ -84,6 +84,49 @@ public class ServiceDepartment {
         return department;
     }
 
+    public List<Department> getSubordinatedDepartments(int id) {//метод Д5 из ТЗ
+        List<Department> departments;
+        SqlSession session = factory.getFactory().openSession();
+        try{
+            departments = session.selectList("Department.selectByIdParentDepartment",id);
+        } finally {
+            session.close();
+        }
+        return departments;
+    }
+
+    public void moveDepartment(Department department) { //метод Д7 из ТЗ
+        SqlSession session = factory.getFactory().openSession();
+        try{
+            session.update("Department.updateIdParentDepartment",department);
+        } finally {
+            session.commit();
+            session.close();
+        }
+    }
+
+    public List<Department> getAllSubordinatedDepartments(int id) {//метод Д6 из ТЗ
+        List<Department> departments;
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            departments = session.selectList("Department.selectByIdParentAllDepartment",id);
+        } finally {
+            session.close();
+        }
+        return departments;
+    }
+
+    public List<Department> getByIdAboveStandingDepartments(int id) { //метод Д8 из ТЗ
+        List<Department> departments;
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            departments = session.selectList("Department.selectByIdAboveStandingDepartment",id);
+        } finally {
+            session.close();
+        }
+        return departments;
+    }
+
     public String getInfoByDepartment(int id){
         JSONObject info = new JSONObject();
         Department department = findDepartmentById(id);
@@ -98,7 +141,7 @@ public class ServiceDepartment {
 
     public List<Employee> getEmployeesByIdDepartment(int id){
         List<Employee> employees = new ArrayList<>();
-        for (Integer idEmployee: findDepartmentById(id).getEmployees()) {
+        for (Integer idEmployee: findDepartmentById(id).employees()) {
             employees.add(serviceEmployee.findEmployeeById(idEmployee));
         }
         return employees;

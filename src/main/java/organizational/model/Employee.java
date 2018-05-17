@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 public class Employee {
     private int id;
     private int idPost;
+    private int idDepartment;
     private String firstName;
     private String secondName;
     private String thirdName;
@@ -168,6 +169,14 @@ public class Employee {
 
     public void setHead(boolean head) {
         this.head = head;
+    }
+
+    public int getIdDepartment() {
+        return idDepartment;
+    }
+
+    public void setIdDepartment(int idDepartment) {
+        this.idDepartment = idDepartment;
     }
 
     private boolean validationName(String name){

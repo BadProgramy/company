@@ -38,4 +38,39 @@
     <select id="selectById" parameterType="int" resultMap="result">
         SELECT * FROM department WHERE id = #{id};
     </select>
+
+    <select id="selectByIdParentDepartment" parameterType="int" resultMap="result">
+        SELECT * FROM department WHERE idparentdepartment = #{id}
+    </select>
+
+    <select id="selectByIdParentAllDepartment" parameterType="int" resultMap="result">
+      WITH recursive departments AS (
+        SELECT id, idparentdepartment, name, datecreation, idemployees from department where idparentdepartment = #{id}
+
+      union
+
+        select department.id, department.idparentdepartment,
+            department.name, department.datecreation, department.idemployees from department
+          join departments on department.idparentdepartment = departments.id
+      )
+      select * from departments;
+    </select>
+    
+    <select id="selectByIdAboveStandingDepartment" parameterType="int" resultMap="result">
+      with recursive departments AS (
+        select id, idparentdepartment, name, datecreation, idemployees from department where id = #{id}
+
+      union
+
+        select department.id, department.idparentdepartment,
+            department.name, department.datecreation, department.idemployees from department
+          join departments on department.id = departments.idparentdepartment
+      )
+
+      select * from departments where id!=#{id};
+    </select>
+
+    <update id="updateIdParentDepartment" parameterType="Department">
+        UPDATE department SET idparentdepartment = #{idParentDepartment} WHERE id = #{id};
+    </update>
 </mapper>

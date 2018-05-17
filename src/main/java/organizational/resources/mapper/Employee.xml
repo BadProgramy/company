@@ -7,6 +7,7 @@
     <resultMap id="result" type="Employee">
         <result property="id" column="id"/>
         <result property="idPost" column="idPost"/>
+        <result property="idDepartment" column="idDepartment"/>
         <result property="firstName" column="firstName"/>
         <result property="secondName" column="secondName"/>
         <result property="thirdName" column="thirdName"/>
@@ -21,8 +22,8 @@
     </resultMap>
 
     <insert id="insert" parameterType="Employee" keyProperty="id">
-        INSERT INTO employee (id,idpost,firstname,secondname,floor,birthdate,contactnumber,email,reception,salary,head)
-         VALUES (nextval('nextIdEmployee'),#{idPost},#{firstName},#{secondName},#{floor},
+        INSERT INTO employee (id,iddepartment,idpost,firstname,secondname,floor,birthdate,contactnumber,email,reception,salary,head)
+         VALUES (nextval('nextIdEmployee'),#{idDepartment},#{idPost},#{firstName},#{secondName},#{floor},
          #{birthDate},#{contactNumber},#{email},#{reception},#{salary},#{head});
     </insert>
 

@@ -44,4 +44,24 @@ public class RestControllerDepartment {
     public String infoDepartment(int id) {
         return serviceDepartment.getInfoByDepartment(id);
     }
+
+    @GetMapping("subordinatedDepartments")
+    public List<Department> getSubordinatedDepartments(int id){
+        return serviceDepartment.getSubordinatedDepartments(id);
+    }
+
+    @GetMapping("allSubordinatedDepartments")
+    public List<Department> getAllSubordinatedDepartments(int id) {
+        return serviceDepartment.getAllSubordinatedDepartments(id);
+    }
+
+    @GetMapping("standingDepartment")
+    public List<Department> getByIdAboveStandingDepartment(int id) {
+        return serviceDepartment.getByIdAboveStandingDepartments(id);
+    }
+
+    @GetMapping("updateIdParentDepartmentById")
+    public void updateIdParentDepartmentById(Department department) {
+        serviceDepartment.moveDepartment(department);
+    }
 }

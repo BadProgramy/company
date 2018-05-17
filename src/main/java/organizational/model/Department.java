@@ -44,7 +44,7 @@ public class Department {
         return idEmployees.size();
     }
 
-    public List<Integer> getEmployees(){
+    public List<Integer> employees(){
         return idEmployees;
     }
 
