@@ -9,28 +9,28 @@ public class Department {
     private String name;
     private int idParentDepartment;
     private LocalDate dateCreation;
-    private  List<Integer> idEmployees;
-    private static final String DEFAULT_SPLIT_REGISTER = ",";
+    //private  List<Integer> idEmployees; //сначало сделал так, но потом передумал (
+    //private static final String DEFAULT_SPLIT_REGISTER = ",";
     private static final String DEFAULT_DATE_SPLIT_CHAR = "-";
 
     public Department() {
-        idEmployees = new ArrayList<>();
+        //idEmployees = new ArrayList<>();
     }
 
-    public String getIdEmployees() {
-        /*StringBuilder idEmployees = new StringBuilder();
+    /*public String getIdEmployees() {
+        *//*StringBuilder idEmployees = new StringBuilder();
         for (int i = 0; i < this.idEmployees.size(); i++) {
             if (i+1!=this.idEmployees.size())
                 idEmployees.append(this.idEmployees.get(i)).append(DEFAULT_SPLIT_REGISTER);
             else idEmployees.append(this.idEmployees.get(i));
-        }*/
+        }*//*
         return idEmployees.toString().replace("[","")
                 .replace("]","")
                 .replace("{","")
                 .replace("}","");
-    }
+    }*/
 
-    public void setIdEmployees(String idEmployees) {
+    /*public void setIdEmployees(String idEmployees) {
         idEmployees = idEmployees.replace("[","")
                 .replace("]","")
                 .replace("{","")
@@ -38,15 +38,15 @@ public class Department {
         for (String id: idEmployees.split(DEFAULT_SPLIT_REGISTER)) {
             this.idEmployees.add((Integer.parseInt(id)));
         }
-    }
+    }*/
 
-    public int sizeEmployees(){
+/*    public int sizeEmployees(){
         return idEmployees.size();
     }
 
     public List<Integer> employees(){
         return idEmployees;
-    }
+    }*/
 
     /*public void addIdEmployee(Integer id){
         idEmployeesList.add(id);

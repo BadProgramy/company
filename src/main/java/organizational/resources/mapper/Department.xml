@@ -9,7 +9,6 @@
         <result property="idParentDepartment" column="idParentDepartment"/>
         <result property="name" column="name"/>
         <result property="dateCreation" column="dateCreation"/>
-        <result property="idEmployees" column="idEmployees"/>
     </resultMap>
 
     <!-- , string_to_array(#{idEmployees},',', '*')::int[] -->
@@ -24,7 +23,7 @@
     </insert>
 
     <select id="selectAll" resultMap="result">
-        SELECT id, idparentdepartment, name, dateCreation, array_to_string(idEmployees, ',', '*') AS idemployees FROM department;
+        SELECT * FROM department;
     </select>
     
     <update id="updateName" parameterType="Department">
@@ -39,18 +38,22 @@
         SELECT * FROM department WHERE id = #{id};
     </select>
 
+    <select id="selectByName" parameterType="String" resultMap="result">
+        SELECT * FROM department WHERE name = #{name};
+    </select>
+
     <select id="selectByIdParentDepartment" parameterType="int" resultMap="result">
         SELECT * FROM department WHERE idparentdepartment = #{id}
     </select>
 
     <select id="selectByIdParentAllDepartment" parameterType="int" resultMap="result">
       WITH recursive departments AS (
-        SELECT id, idparentdepartment, name, datecreation, idemployees from department where idparentdepartment = #{id}
+        SELECT id, idparentdepartment, name, datecreation from department where idparentdepartment = #{id}
 
       union
 
         select department.id, department.idparentdepartment,
-            department.name, department.datecreation, department.idemployees from department
+            department.name, department.datecreation from department
           join departments on department.idparentdepartment = departments.id
       )
       select * from departments;
@@ -58,12 +61,12 @@
     
     <select id="selectByIdAboveStandingDepartment" parameterType="int" resultMap="result">
       with recursive departments AS (
-        select id, idparentdepartment, name, datecreation, idemployees from department where id = #{id}
+        select id, idparentdepartment, name, datecreation from department where id = #{id}
 
       union
 
         select department.id, department.idparentdepartment,
-            department.name, department.datecreation, department.idemployees from department
+            department.name, department.datecreation from department
           join departments on department.id = departments.idparentdepartment
       )
 
@@ -73,4 +76,8 @@
     <update id="updateIdParentDepartment" parameterType="Department">
         UPDATE department SET idparentdepartment = #{idParentDepartment} WHERE id = #{id};
     </update>
+
+    <select id="sumSalaryEmployeesByDepartment" parameterType="int" resultType="float">
+        Select sum(salary) from employee where iddepartment = #{id} and layoff is NULL;
+    </select>
 </mapper>

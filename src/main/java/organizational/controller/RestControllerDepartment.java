@@ -11,6 +11,7 @@ import organizational.service.exception.DeleteDepartmentException;
 import organizational.service.exception.UniqueException;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/departments")
@@ -20,48 +21,58 @@ public class RestControllerDepartment {
     private ServiceDepartment serviceDepartment;
 
 
-    @GetMapping("allDepartments")
+    @GetMapping("allDepartments")//++
     public List<Department> getAllEmployee() {
         return serviceDepartment.getAllDepartment();
     }
 
-    @GetMapping("addDepartment")
+    @GetMapping("addDepartment")//++
     public int addEmployee(Department department) throws UniqueException {
         return serviceDepartment.insert(department);
     }
 
-    @GetMapping("updateNameDepartment")
+    @GetMapping("updateNameDepartment")//++
     public void updateName(Department department) throws UniqueException {
         serviceDepartment.updateName(department);
     }
 
-    @GetMapping("deleteDepartment")
+    @GetMapping("delete")//++
     public void deleteDepartment(int id) throws DeleteDepartmentException {
         serviceDepartment.delete(id);
     }
 
-    @GetMapping("infoDepartment")
-    public String infoDepartment(int id) {
+    @GetMapping("info")//++
+    public Map<String,Object> infoDepartment(int id) {
         return serviceDepartment.getInfoByDepartment(id);
     }
 
-    @GetMapping("subordinatedDepartments")
+    @GetMapping("subordinatedDepartments")//++
     public List<Department> getSubordinatedDepartments(int id){
         return serviceDepartment.getSubordinatedDepartments(id);
     }
 
-    @GetMapping("allSubordinatedDepartments")
+    @GetMapping("allSubordinatedDepartments")//++
     public List<Department> getAllSubordinatedDepartments(int id) {
         return serviceDepartment.getAllSubordinatedDepartments(id);
     }
 
-    @GetMapping("standingDepartment")
+    @GetMapping("standingDepartment")//++
     public List<Department> getByIdAboveStandingDepartment(int id) {
         return serviceDepartment.getByIdAboveStandingDepartments(id);
     }
 
-    @GetMapping("updateIdParentDepartmentById")
+    @GetMapping("updateIdParentDepartmentById")//++
     public void updateIdParentDepartmentById(Department department) {
         serviceDepartment.moveDepartment(department);
+    }
+
+    @GetMapping("findDepartmentByName")//++
+    public Department findDepartmentByName(String name) {
+        return serviceDepartment.findDepartmentByName(name);
+    }
+
+    @GetMapping("salaryAllEmployeesByDepartment")//++
+    public float getSalaryAllEmployeesByDepartment(int id) {
+        return serviceDepartment.getSalaryAllEmployeesByDepartment(id);
     }
 }

@@ -27,11 +27,47 @@
          #{birthDate},#{contactNumber},#{email},#{reception},#{salary},#{head});
     </insert>
 
+    <update id="update" parameterType="Employee">
+        UPDATE employee SET idpost = #{idPost}, iddepartment = #{idDepartment},  firstname = #{firstName},
+         secondname = #{secondName}, thirdname = #{thirdName}, floor = #{floor}, birthdate = #{birthDate},
+         contactnumber = #{contactNumber}, email = #{email}, reception = #{reception}, layoff = #{layoff},
+         salary = #{salary}, head = #{head}
+         WHERE id = #{id};
+    </update>
+
     <select id="selectAll" resultMap="result">
-        SELECT * FROM employee;
+        SELECT * FROM employee where;
     </select>
 
     <select id="selectById" parameterType="int" resultMap="result">
         SELECT * FROM employee WHERE id = #{id};
+    </select>
+
+    <select id="headEmployeeInDepartment" parameterType="int" resultMap="result">
+        select * from employee where iddepartment = #{id} and head = true and layoff is NULL;
+    </select>
+
+    <select id="countEmployeesInDepartment" parameterType="int" resultType="int">
+        select count(*) from employee where iddepartment = #{id} and layoff is NULL;
+    </select>
+
+    <select id="employeesByIdDepartment" parameterType="int" resultMap="result">
+        select * from employee where iddepartment = #{idDepartment} and layoff is NULL;
+    </select>
+
+    <update id="layoff" parameterType="Employee">
+        UPDATE employee SET layoff = #{layoff} WHERE id = #{id};
+    </update>
+
+    <update id="updateDepartmentByIdEmployee" parameterType="Employee">
+        UPDATE employee SET iddepartment = #{idDepartment} WHERE id = #{id};
+    </update>
+
+    <update id="updateDepartmentAllEmployees" parameterType="java.util.Map">
+        UPDATE employee SET iddepartment = #{idNextDepartment} WHERE iddepartment = #{idCurrentDepartment} and layoff is NULL;
+    </update>
+
+    <select id="findEmployeeByName" parameterType="java.util.Map" resultMap="result">
+        select * from employee where firstname = #{firstName} and secondname = #{secondName};
     </select>
 </mapper>

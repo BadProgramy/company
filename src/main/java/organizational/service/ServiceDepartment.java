@@ -11,15 +11,13 @@ import organizational.service.exception.UniqueException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ServiceDepartment {
 
     @Autowired
     private Factory factory;
-
-    @Autowired
-    private ServiceEmployee serviceEmployee;
 
     public List<Department> getAllDepartment(){
         List<Department> departments;
@@ -64,7 +62,7 @@ public class ServiceDepartment {
     public void delete(int id) throws DeleteDepartmentException {
         SqlSession session = factory.getFactory().openSession();
         try {
-            if (findDepartmentById(id).sizeEmployees() == 0)
+            if (sizeEmployeesInDepartment(id) == 0)
                 session.delete("Department.delete",id);
             else throw new DeleteDepartmentException();
         } finally {
@@ -78,6 +76,17 @@ public class ServiceDepartment {
         SqlSession session = factory.getFactory().openSession();
         try {
             department = session.selectOne("Department.selectById",id);
+        } finally {
+            session.close();
+        }
+        return department;
+    }
+
+    public Department findDepartmentByName(String name) {
+        Department department;
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            department = session.selectOne("Department.selectByName",name);
         } finally {
             session.close();
         }
@@ -127,31 +136,50 @@ public class ServiceDepartment {
         return departments;
     }
 
-    public String getInfoByDepartment(int id){
+    public float getSalaryAllEmployeesByDepartment(int id) {
+        float sum;
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            sum = session.selectOne("Department.sumSalaryEmployeesByDepartment",id);
+        } finally {
+            session.close();
+        }
+        return sum;
+    }
+
+    public Map<String, Object> getInfoByDepartment(int id){
         JSONObject info = new JSONObject();
         Department department = findDepartmentById(id);
         info.put("Наименование", department.getName());
         info.put("Дата создания", department.getDateCreation());
-        Employee headEmployee = headEmployeeByIdDepartment(id);
-        info.put("Руководитель", headEmployee.getFirstName().concat(" ")
-                .concat(headEmployee.getSecondName()).concat(" "));
-        info.put("Количество сотрудников",department.sizeEmployees());
-        return info.toString();
+        Employee headEmployee = headEmployeeInDepartment(id);
+        if (headEmployee != null)
+            info.put("Руководитель", headEmployee);
+        else info.put("Руководитель", "не назначен");
+        info.put("Количество сотрудников",sizeEmployeesInDepartment(id));
+        return info.toMap();
     }
 
-    public List<Employee> getEmployeesByIdDepartment(int id){
-        List<Employee> employees = new ArrayList<>();
-        for (Integer idEmployee: findDepartmentById(id).employees()) {
-            employees.add(serviceEmployee.findEmployeeById(idEmployee));
+    private Employee headEmployeeInDepartment(int id) {
+        Employee employee;
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            employee = session.selectOne("Employee.headEmployeeInDepartment",id);
+        } finally {
+            session.close();
         }
-        return employees;
+        return employee;
     }
 
-    public Employee headEmployeeByIdDepartment(int id){
-        for (Employee employee: getEmployeesByIdDepartment(id)) {
-            if (employee.isHead()) return employee;
+    private int sizeEmployeesInDepartment(int id) {
+        int size;
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            size = session.selectOne("Employee.countEmployeesInDepartment",id);
+        } finally {
+            session.close();
         }
-        return null;
+        return size;
     }
 
     private boolean uniqueDepartment(Department department){

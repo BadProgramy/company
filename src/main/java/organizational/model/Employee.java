@@ -139,7 +139,7 @@ public class Employee {
                     Integer.parseInt(layoffDateSplit[1]), Integer.parseInt(layoffDateSplit[2]));
             if (date.compareTo(reception) < 0) throw new DataFormatException();
             else this.layoff = date;
-        }catch (DataFormatException ex){
+        } catch (DataFormatException ex){
             throw new DataFormatException("Дата увольнения < даты приема");
         }
         catch (Exception ex){
@@ -179,6 +179,42 @@ public class Employee {
         this.idDepartment = idDepartment;
     }
 
+    public void updateEmployee(Employee employee){ // я устал и поэтому оставил так :(
+        if (employee.getIdPost() != 0)
+            idPost = employee.getIdPost();
+        if (employee.getIdDepartment() != 0)
+            idDepartment = employee.getIdDepartment();
+        if (employee.getFirstName()!=null)
+            firstName = employee.getFirstName();
+        if (employee.getSecondName() != null)
+            secondName = employee.getSecondName();
+        if (employee.getThirdName() != null)
+            thirdName = employee.getThirdName();
+        if (employee.getFloor() != null)
+            floor = employee.getFloor();
+        if (employee.getBirthDate() != null)
+            birthDate = employee.getBirthDate();
+        if (employee.getContactNumber() != null)
+            contactNumber = employee.getContactNumber();
+        if (employee.getEmail() != null)
+            email = employee.getEmail();
+        if (employee.getReception() != null)
+            reception = employee.getReception();
+        if (employee.getLayoff() != null)
+            layoff = employee.getLayoff();
+        if (employee.getSalary() != 0)
+            salary = employee.getSalary();
+        if (employee.isHead() != head)
+            head = employee.isHead();
+    }
+
+    public void layoffEmployee(LocalDate layoffDate) { //здесь не нужна проверка, она уже в set
+        layoff = layoffDate;
+        idDepartment = 0;//надо было, для уволенных сотрудников сделать отдельную таблицу, либо менять sql запросы
+        //Но в тз небыло такого :)
+        //idPost = 0;//лучше должность оставить
+    }
+
     private boolean validationName(String name){
         return Pattern.compile(REGULAR_NAME).matcher(name).matches();
     }
@@ -189,5 +225,25 @@ public class Employee {
 
     private boolean validationEmail(String email){
         return Pattern.compile(REGULAR_EMAIL).matcher(email).matches();
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", idPost=" + idPost +
+                ", idDepartment=" + idDepartment +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", thirdName='" + thirdName + '\'' +
+                ", floor=" + floor +
+                ", birthDate=" + birthDate +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", reception=" + reception +
+                ", layoff=" + layoff +
+                ", salary=" + salary +
+                ", head=" + head +
+                '}';
     }
 }

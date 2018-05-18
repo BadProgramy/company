@@ -30,6 +30,5 @@ dependencies {
 	compile('org.apache.commons:commons-dbcp2')
 	compile('org.postgresql:postgresql')
 	compile('org.json:json:20160810')
-	//runtime('postgresql:postgresql:9.1-901-1.jdbc4')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
