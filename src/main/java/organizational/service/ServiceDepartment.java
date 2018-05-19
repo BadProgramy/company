@@ -8,8 +8,6 @@ import organizational.model.Department;
 import organizational.model.Employee;
 import organizational.service.exception.DeleteDepartmentException;
 import organizational.service.exception.UniqueException;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -114,7 +112,8 @@ public class ServiceDepartment {
         }
     }
 
-    public List<Department> getAllSubordinatedDepartments(int id) {//метод Д6 из ТЗ
+    public List<Department> getAllSubordinatedDepartments(int id) {//метод Д6 из ТЗ //я думаю лучше это сделать через запрос
+        //да и для меня это было хорошей практикой
         List<Department> departments;
         SqlSession session = factory.getFactory().openSession();
         try {
@@ -125,7 +124,7 @@ public class ServiceDepartment {
         return departments;
     }
 
-    public List<Department> getByIdAboveStandingDepartments(int id) { //метод Д8 из ТЗ
+    public List<Department> getByIdAboveStandingDepartments(int id) { //метод Д8 из ТЗ //такой же комент как и для метода Д6
         List<Department> departments;
         SqlSession session = factory.getFactory().openSession();
         try {

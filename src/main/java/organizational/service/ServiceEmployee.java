@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import organizational.model.Employee;
 import organizational.model.exception.DataFormatException;
+import organizational.service.exception.CorrectDataException;
+import organizational.service.exception.NullColumnException;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +18,18 @@ public class ServiceEmployee{
     @Autowired
     private Factory factory;
 
-    public int insert(Employee employee) {
-        int id;
+    //todo я не понял что значит ОКЛАД должен быть валидным, я незнаю какие зарплаты у программистов да и вообще я студент 3го курса :)
+    public int insert(Employee employee) throws CorrectDataException {
+        int id = -1;
         SqlSession session = factory.getFactory().openSession();
         try {
-             session.insert("Employee.insert",employee);
-             id = employee.getId();
+            Employee headEmployee = session.selectOne("Employee.headEmployeeInDepartment",employee.getIdDepartment());
+            if ((!employee.isHead() && (headEmployee == null || headEmployee.getSalary() > employee.getSalary())) ||
+                    employee.isHead() && (headEmployee == null && employee.getSalary() > maxSalaryEmployees(employee.getIdDepartment())))
+                id = session.insert("Employee.insert",employee);
+            else throw new CorrectDataException();
+        } catch (NullPointerException ex) {
+            throw new NullColumnException();
         } finally {
             session.commit();
             session.close();
@@ -31,12 +37,38 @@ public class ServiceEmployee{
         return id;
     }
 
-    public void update(Employee employee) {
-        Employee employeeUpdate = findEmployeeById(employee.getId());
-        employeeUpdate.updateEmployee(employee);
+    private float maxSalaryEmployees(int idDepartment) {
+        Float maxSalary = 0f;
         SqlSession session = factory.getFactory().openSession();
         try {
-            session.update("Employee.update",employeeUpdate);
+            maxSalary = session.selectOne("Employee.maxSalaryInDepartment",idDepartment);
+        } finally {
+            session.close();
+        }
+        return maxSalary;
+    }
+
+    private void deleteEmployee(int id) {
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            session.delete("Employee.delete", id);
+        } finally {
+            session.commit();
+            session.close();
+        }
+    }
+
+    public void update(Employee employee) {
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            Employee employeeUpdate = findEmployeeById(employee.getId());
+            Employee headEmployee = getHeadEmployeeByEmployee(employee.getId());
+            employeeUpdate.updateEmployee(employee);
+            if (headEmployee == null ||
+                    (headEmployee != null && headEmployee.getId() == employeeUpdate.getId() && employeeUpdate.isHead() &&
+                    employeeUpdate.getSalary() > maxSalaryEmployees(employeeUpdate.getIdDepartment())) ||
+                    headEmployee != null && headEmployee.getId() == employeeUpdate.getId() && !employee.isHead())
+                session.update("Employee.update",employee);
         } finally {
             session.commit();
             session.close();

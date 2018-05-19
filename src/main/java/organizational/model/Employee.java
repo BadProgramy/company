@@ -208,12 +208,12 @@ public class Employee {
             head = employee.isHead();
     }
 
-    public void layoffEmployee(LocalDate layoffDate) { //здесь не нужна проверка, она уже в set
+    /*public void layoffEmployee(LocalDate layoffDate) { //здесь не нужна проверка, она уже в set
         layoff = layoffDate;
         idDepartment = 0;//надо было, для уволенных сотрудников сделать отдельную таблицу, либо менять sql запросы
         //Но в тз небыло такого :)
         //idPost = 0;//лучше должность оставить
-    }
+    }*/
 
     private boolean validationName(String name){
         return Pattern.compile(REGULAR_NAME).matcher(name).matches();

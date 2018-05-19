@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import organizational.model.Employee;
 import organizational.model.exception.DataFormatException;
 import organizational.service.ServiceEmployee;
+import organizational.service.exception.CorrectDataException;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class RestControllerEmployee {
     }
 
     @GetMapping("addEmployee")//++
-    public int addEmployee(Employee employee){
+    public int addEmployee(Employee employee) throws CorrectDataException {
         return serviceEmployee.insert(employee);
     }
 
