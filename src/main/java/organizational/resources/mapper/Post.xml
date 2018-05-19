@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Post">
+    <resultMap id="result" type="Post">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="Post" keyProperty="id">
+        insert into post (id,name) values (nextval('nextIdPost'), #{name});
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from post where id = #{id};
+    </delete>
+
+    <update id="update" parameterType="Post">
+        update post set name = #{name} where id = #{id};
+    </update>
+
+    <select id="allPost" resultMap="result">
+        select * from post;
+    </select>
+
+    <select id="findById" parameterType="int" resultMap="result">
+        select * from post where id = #{id};
+    </select>
+</mapper>
