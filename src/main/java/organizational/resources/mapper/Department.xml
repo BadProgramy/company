@@ -80,4 +80,17 @@
     <select id="sumSalaryEmployeesByDepartment" parameterType="int" resultType="float">
         Select sum(salary) from employee where iddepartment = #{id} and layoff is NULL;
     </select>
+
+    <select id="fundSalaryDepartment" parameterType="java.util.Map">
+        insert into fund (id,iddepartment,salarydepartment)
+        values (nextval('nextidfond'),#{idDepartment},#{sum});
+    </select>
+
+    <delete id="clearFondTable">
+        delete from fund;
+    </delete>
+
+    <update id="updateSequenceFund">
+        ALTER SEQUENCE nextidfond RESTART WITH 1;
+    </update>
 </mapper>

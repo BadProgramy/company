@@ -3,6 +3,7 @@ package organizational.service;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import organizational.model.Department;
 import organizational.model.Employee;
@@ -10,6 +11,8 @@ import organizational.model.Event;
 import organizational.model.ReadyEvent;
 import organizational.service.exception.DeleteDepartmentException;
 import organizational.service.exception.UniqueException;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -137,7 +140,7 @@ public class ServiceDepartment {
     }
 
     public List<Department> getAllSubordinatedDepartments(int id) {//метод Д6 из ТЗ //я думаю лучше это сделать через запрос
-        //да и для меня это было хорошей практикой
+        //да и для меня это будет хорошей практикой
         List<Department> departments;
         SqlSession session = factory.getFactory().openSession();
         try {
@@ -160,14 +163,47 @@ public class ServiceDepartment {
     }
 
     public float getSalaryAllEmployeesByDepartment(int id) {
-        float sum;
+        float sum = 0f ;
         SqlSession session = factory.getFactory().openSession();
         try {
-            sum = session.selectOne("Department.sumSalaryEmployeesByDepartment",id);
-        } finally {
+            Object result = session.selectOne("Department.sumSalaryEmployeesByDepartment", id);
+            if (result != null)
+                sum = Float.parseFloat(result.toString());
+        }
+        /*catch (NullPointerException ex) {
+            sum = 0f;
+            session.close();
+            return sum;
+        }*/
+        finally {
             session.close();
         }
         return sum;
+    }
+
+    //Нвдо сделать одним запросом, но я слаб в запросах, этим я займусь лето :)
+    @Scheduled(fixedDelay = 300000)
+    //Я незнаю конечно верно ли, то что метод по расписанию сделал здесь, лучше сделать в отдельном классе, где будут собраны все scheduler
+    //Но т.к один метод оставлю здесь
+    public void saveFundSalaryDepartment() {
+        Map<String,Object> allFundDepartments = new HashMap<>();
+        if (factory != null) {
+            SqlSession session = factory.getFactory().openSession();
+            try {
+                session.update("Department.updateSequenceFund");
+                session.delete("Department.clearFondTable");
+                // allFundDepartments = session.selectMap("Department.selectAllFundSalaryDepartment","iddepartment");
+                for (Department department : getAllDepartment()) {
+                    allFundDepartments.put("idDepartment", department.getId());
+                    allFundDepartments.put("sum", getSalaryAllEmployeesByDepartment(department.getId()));
+                    session.insert("Department.fundSalaryDepartment", allFundDepartments);
+                    allFundDepartments.clear();
+                }
+            } finally {
+                session.commit();
+                session.close();
+            }
+        }
     }
 
     public Map<String, Object> getInfoByDepartment(int id){

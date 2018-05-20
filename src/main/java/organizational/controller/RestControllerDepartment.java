@@ -2,6 +2,7 @@ package organizational.controller;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,7 +78,7 @@ public class RestControllerDepartment {
         return serviceDepartment.getSalaryAllEmployeesByDepartment(id);
     }
 
-    @GetMapping("events")
+    @GetMapping("events")//++
     public List<Event> getEvents() {
         return serviceDepartment.getAllEvents();
     }
