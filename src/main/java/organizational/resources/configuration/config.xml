@@ -8,11 +8,13 @@
         <typeAlias alias="Employee" type="organizational.model.Employee"/>
         <typeAlias alias="Department" type="organizational.model.Department"/>
         <typeAlias type="organizational.model.Post" alias="Post"/>
+        <typeAlias type="organizational.model.Event" alias="Event"/>
     </typeAliases>
 
     <mappers>
         <mapper resource="organizational/resources/mapper/Employee.xml"/>
         <mapper resource="organizational/resources/mapper/Department.xml"/>
         <mapper resource="organizational/resources/mapper/Post.xml"/>
+        <mapper resource="organizational/resources/mapper/Event.xml"/>
     </mappers>
 </configuration>

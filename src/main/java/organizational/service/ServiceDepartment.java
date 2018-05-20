@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import organizational.model.Department;
 import organizational.model.Employee;
+import organizational.model.Event;
+import organizational.model.ReadyEvent;
 import organizational.service.exception.DeleteDepartmentException;
 import organizational.service.exception.UniqueException;
 import java.util.List;
@@ -36,6 +38,11 @@ public class ServiceDepartment {
                 if (department.getIdParentDepartment() != 0)
                     id = session.insert("Department.insert", department);
                 else id = session.insert("Department.insertHead", department);
+                if (id == 1) {
+                    Event createDepartment = ReadyEvent.createDepartment;
+                    createDepartment.addDescription(department.getName());
+                    session.insert("Event.saveEvent", createDepartment);
+                }
             }
             else throw new UniqueException();
         } finally {
@@ -46,11 +53,19 @@ public class ServiceDepartment {
     }
 
     public void updateName(Department department) throws UniqueException {
+        int id = -1;
         SqlSession session = factory.getFactory().openSession();
         try {
+            Department departmentPrev = findDepartmentById(department.getId());
             if (uniqueDepartment(department))
-                session.update("Department.updateName", department);
+                id = session.update("Department.updateName", department);
             else throw new UniqueException();
+            if (id == 1) {
+                Event renameDepartment = ReadyEvent.renameDepartment;
+                renameDepartment.addDescription(
+                        departmentPrev.getName().concat(" --> ").concat(department.getName()));
+                session.insert("Event.saveEvent", renameDepartment);
+            }
         } finally {
             session.commit();
             session.close();
@@ -103,9 +118,18 @@ public class ServiceDepartment {
     }
 
     public void moveDepartment(Department department) { //метод Д7 из ТЗ
+        int id = -1;
         SqlSession session = factory.getFactory().openSession();
-        try{
-            session.update("Department.updateIdParentDepartment",department);
+        try {
+            Department departmentPrev = findDepartmentById(department.getId());
+            id = session.update("Department.updateIdParentDepartment",department);
+            if (id == 1) {
+                Event moveDepartment = ReadyEvent.moveDepartment;
+                moveDepartment.addDescription(
+                        String.valueOf(departmentPrev.getIdParentDepartment()).concat(" --> ").concat(
+                                String.valueOf(department.getIdParentDepartment())));
+                session.insert("Event.saveEvent", moveDepartment);
+            }
         } finally {
             session.commit();
             session.close();
@@ -186,5 +210,16 @@ public class ServiceDepartment {
             if (depart.getName().equals(department.getName())) return false;
         }
         return true;
+    }
+
+    public List<Event> getAllEvents() {
+        List<Event> events;
+        SqlSession session = factory.getFactory().openSession();
+        try {
+            events = session.selectList("allEvents");
+        } finally {
+            session.close();
+        }
+        return events;
     }
 }

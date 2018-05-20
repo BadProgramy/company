@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import organizational.model.Department;
+import organizational.model.Event;
 import organizational.service.ServiceDepartment;
 import organizational.service.exception.DeleteDepartmentException;
 import organizational.service.exception.UniqueException;
@@ -61,7 +62,7 @@ public class RestControllerDepartment {
         return serviceDepartment.getByIdAboveStandingDepartments(id);
     }
 
-    @GetMapping("updateIdParentDepartmentById")//++
+    @GetMapping("moveDepartment")//++
     public void updateIdParentDepartmentById(Department department) {
         serviceDepartment.moveDepartment(department);
     }
@@ -74,5 +75,10 @@ public class RestControllerDepartment {
     @GetMapping("salaryAllEmployeesByDepartment")//++
     public float getSalaryAllEmployeesByDepartment(int id) {
         return serviceDepartment.getSalaryAllEmployeesByDepartment(id);
+    }
+
+    @GetMapping("events")
+    public List<Event> getEvents() {
+        return serviceDepartment.getAllEvents();
     }
 }
