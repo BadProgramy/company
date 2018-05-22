@@ -12,9 +12,9 @@
     </typeAliases>
 
     <mappers>
-        <mapper resource="organizational/resources/mapper/Employee.xml"/>
-        <mapper resource="organizational/resources/mapper/Department.xml"/>
-        <mapper resource="organizational/resources/mapper/Post.xml"/>
-        <mapper resource="organizational/resources/mapper/Event.xml"/>
+        <mapper resource="mapper/Employee.xml"/>
+        <mapper resource="mapper/Department.xml"/>
+        <mapper resource="mapper/Post.xml"/>
+        <mapper resource="mapper/Event.xml"/>
     </mappers>
 </configuration>

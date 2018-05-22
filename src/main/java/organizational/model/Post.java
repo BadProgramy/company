@@ -1,7 +1,11 @@
 package organizational.model;
 
+import io.swagger.annotations.ApiParam;
+
 public class Post {
+    @ApiParam(hidden = true)
     private int id;
+    @ApiParam(value = "Name post", required = true)
     private String name;
 
     public int getId() {

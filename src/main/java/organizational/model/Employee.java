@@ -1,26 +1,42 @@
 package organizational.model;
 
 
+import io.swagger.annotations.ApiParam;
 import organizational.model.exception.DataFormatException;
 import organizational.model.exception.FormatException;
 
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
+//Примеры применяются только к body
 public class Employee {
+    @ApiParam(hidden = true)
     private int id;
+    @ApiParam(value = "Identifier post for employee")
     private int idPost;
+    @ApiParam(value = "Identifier department for employee. For the top level it isn't necessary")
     private int idDepartment;
+    @ApiParam(value = "Name Employee", example = "Иван")
     private String firstName;
+    @ApiParam(value = "Surname", example = "Иванов")
     private String secondName;
+    @ApiParam(value = "Middle name",example = "Иванович")
     private String thirdName;
+    @ApiParam(value = "Floor employee (m,g)", example = "m")//man and girl (socrat. m, g)
     private Character floor;
-    private LocalDate birthDate;
+    @ApiParam(value = "Birth date employee", example = "1997-08-08")
+    private String birthDate;
+    @ApiParam(value = "Phone number", example = "89271234567")
     private String contactNumber;
+    @ApiParam(value = "Email", example = "example@yandex.ru")
     private String email;
-    private LocalDate reception;
-    private LocalDate layoff;
+    @ApiParam(value = "Employment date", example = "2018-02-13")
+    private String reception;
+    @ApiParam(value = "Date of dismissal",example = "2018-05-22")
+    private String layoff;
+    @ApiParam(value = "Salary employee", example = "29999")
     private float salary;
+    @ApiParam(value = "Head? true | false", defaultValue = "false", example = "true")
     private boolean head;
     private static final String DEFAULT_DATE_SPLIT_CHAR = "-";
     private static final String VALIDATE_NAME = "Ф - Мухутдинов; И - Айрат; О - Анварович";
@@ -65,7 +81,7 @@ public class Employee {
     }
 
     public void setThirdName(String thirdName) throws FormatException {
-        if (!validationName(thirdName)) throw new FormatException(VALIDATE_NAME);
+        if (!validationName(thirdName) || thirdName == null) throw new FormatException(VALIDATE_NAME);
         else this.thirdName = thirdName;
     }
 
@@ -77,7 +93,7 @@ public class Employee {
         this.floor = floor;
     }
 
-    public LocalDate getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
@@ -85,7 +101,7 @@ public class Employee {
         try{
         String[] birthDateSplit = birthDate.split(DEFAULT_DATE_SPLIT_CHAR);
         this.birthDate = LocalDate.of(Integer.parseInt((birthDateSplit[0])),
-                Integer.parseInt(birthDateSplit[1]),Integer.parseInt(birthDateSplit[2]));
+                Integer.parseInt(birthDateSplit[1]),Integer.parseInt(birthDateSplit[2])).toString();
         } catch (Exception ex){
             throw new DataFormatException(VALIDATE_DATE);
         }
@@ -109,7 +125,7 @@ public class Employee {
         else this.email = email;
     }
 
-    public LocalDate getReception() {
+    public String getReception() {
         return reception;
     }
 
@@ -118,8 +134,8 @@ public class Employee {
             String[] receptionDateSplit = reception.split(DEFAULT_DATE_SPLIT_CHAR);
             LocalDate date = LocalDate.of(Integer.parseInt((receptionDateSplit[0])),
                     Integer.parseInt(receptionDateSplit[1]), Integer.parseInt(receptionDateSplit[2]));
-            if (date.compareTo(birthDate)< 0) throw new DataFormatException();
-            else this.reception = date;
+            if (date.compareTo(LocalDate.parse(birthDate))< 0) throw new DataFormatException();
+            else this.reception = date.toString();
         }catch (DataFormatException ex){
             throw new DataFormatException("Дата приема на работу < даты рождения");
         }
@@ -128,7 +144,7 @@ public class Employee {
         }
     }
 
-    public LocalDate getLayoff() {
+    public String getLayoff() {
         return layoff;
     }
 
@@ -137,8 +153,8 @@ public class Employee {
             String[] layoffDateSplit = layoff.split(DEFAULT_DATE_SPLIT_CHAR);
             LocalDate date = LocalDate.of(Integer.parseInt((layoffDateSplit[0])),
                     Integer.parseInt(layoffDateSplit[1]), Integer.parseInt(layoffDateSplit[2]));
-            if (date.compareTo(reception) < 0) throw new DataFormatException();
-            else this.layoff = date;
+            if (date.compareTo(LocalDate.parse(reception)) < 0) throw new DataFormatException();
+            else this.layoff = date.toString();
         } catch (DataFormatException ex){
             throw new DataFormatException("Дата увольнения < даты приема");
         }
@@ -179,7 +195,7 @@ public class Employee {
         this.idDepartment = idDepartment;
     }
 
-    public void updateEmployee(Employee employee){ // я устал и поэтому оставил так :(
+    public void updateEmployee(Employee employee){ // надо было быстро сделать и поэтому оставил так :(
         if (employee.getIdPost() != 0)
             idPost = employee.getIdPost();
         if (employee.getIdDepartment() != 0)

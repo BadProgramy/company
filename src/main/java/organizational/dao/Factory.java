@@ -1,4 +1,4 @@
-package organizational.service;
+package organizational.dao;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -12,7 +12,7 @@ public class Factory {
     private SqlSessionFactory factory;
 
     public Factory() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("organizational/resources/configuration/spring-config.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("configuration/spring-config.xml");
         factory = (SqlSessionFactory) ctx.getBean("sqlSessionFactory");
     }
 

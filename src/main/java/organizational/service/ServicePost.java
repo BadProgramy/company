@@ -1,68 +1,41 @@
 package organizational.service;
 
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import organizational.model.Post;
+import organizational.dao.post.DAOPost;
 
 import java.util.List;
 
 @Service
 public class ServicePost {
+
     @Autowired
-    private Factory factory;
+    private DAOPost daoPost;
 
+    @Transactional
     public int insert(Post post) {
-        int id = -1;
-        SqlSession session = factory.getFactory().openSession();
-        try {
-            id = session.insert("Post.insert",post);
-        } finally {
-            session.commit();
-            session.close();
-        }
-        return id;
+        return daoPost.insert(post);
     }
 
-    public void update(Post post) {
-        SqlSession session = factory.getFactory().openSession();
-        try {
-            session.update("Post.update", post);
-        } finally {
-            session.commit();
-            session.close();
-        }
+    @Transactional
+    public void update(int id, Post post) {
+        daoPost.update(id, post);
     }
 
+    @Transactional
     public void delete(int id) {
-        SqlSession session = factory.getFactory().openSession();
-        try {
-            session.delete("Post.delete",id);
-        } finally {
-            session.commit();
-            session.close();
-        }
+        daoPost.delete(id);
     }
 
+    @Transactional
     public Post findPostById(int id) {
-        Post post;
-        SqlSession session = factory.getFactory().openSession();
-        try {
-            post = session.selectOne("Post.findById",id);
-        } finally {
-            session.close();
-        }
-        return post;
+        return daoPost.findPostById(id);
     }
 
+    @Transactional
     public List<Post> allPost() {
-        List<Post> posts;
-        SqlSession session = factory.getFactory().openSession();
-        try {
-            posts = session.selectList("Post.allPost");
-        } finally {
-            session.close();
-        }
-        return posts;
+        return daoPost.allPost();
     }
 }

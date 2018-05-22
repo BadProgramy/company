@@ -22,8 +22,9 @@
     </resultMap>
 
     <insert id="insert" parameterType="Employee" keyProperty="id">
-        INSERT INTO employee (id,iddepartment,idpost,firstname,secondname,floor,birthdate,contactnumber,email,reception,salary,head)
-         VALUES (nextval('nextIdEmployee'),#{idDepartment},#{idPost},#{firstName},#{secondName},#{floor},
+        INSERT INTO employee (id,iddepartment,idpost,firstname,secondname, thirdname,
+        floor,birthdate,contactnumber,email,reception,salary,head)
+         VALUES (nextval('nextIdEmployee'),#{idDepartment},#{idPost},#{firstName},#{secondName},#{thirdName},#{floor},
          #{birthDate},#{contactNumber},#{email},#{reception},#{salary},#{head});
     </insert>
 
@@ -36,7 +37,7 @@
     </update>
 
     <select id="selectAll" resultMap="result">
-        SELECT * FROM employee where;
+        SELECT * FROM employee;
     </select>
 
     <select id="selectById" parameterType="int" resultMap="result">
@@ -60,15 +61,17 @@
     </update>
 
     <update id="updateDepartmentByIdEmployee" parameterType="Employee">
-        UPDATE employee SET iddepartment = #{idDepartment} WHERE id = #{id};
+        UPDATE employee SET iddepartment = #{idDepartment}, head = false WHERE id = #{id};
     </update>
 
     <update id="updateDepartmentAllEmployees" parameterType="java.util.Map">
-        UPDATE employee SET iddepartment = #{idNextDepartment} WHERE iddepartment = #{idCurrentDepartment} and layoff is NULL;
+        UPDATE employee SET iddepartment = #{idNextDepartment}, head = false
+        WHERE iddepartment = #{idCurrentDepartment} and layoff is NULL;
     </update>
 
     <select id="findEmployeeByName" parameterType="java.util.Map" resultMap="result">
-        select * from employee where firstname = #{firstName} and secondname = #{secondName};
+        select * from employee where firstname = #{firstName} and secondname = #{secondName}
+         order by firstname DESC, secondname DESC LIMIT 1;
     </select>
 
     <select id="maxSalaryInDepartment" parameterType="int" resultType="float">
