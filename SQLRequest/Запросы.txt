@@ -1,0 +1,265 @@
+CREATE DATABASE company
+  WITH OWNER = postgres
+       ENCODING = 'UTF8'
+       TABLESPACE = pg_default
+       LC_COLLATE = 'Russian_Russia.1251'
+       LC_CTYPE = 'Russian_Russia.1251'
+       CONNECTION LIMIT = -1;
+
+create sequence nextidevent start 1;
+create sequence nextidfond start 1;
+create sequence nextidpost start 1;
+create sequence nextidemployee start 1;
+create sequence nextiddepartment start 1;
+
+CREATE TABLE public.department
+(
+  id integer NOT NULL,
+  idparentdepartment integer,
+  name character varying(30) NOT NULL,
+  datecreation text NOT NULL,
+  CONSTRAINT department_pkey PRIMARY KEY (id),
+  CONSTRAINT department_idparentdepartment_fkey FOREIGN KEY (idparentdepartment)
+      REFERENCES public.department (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE TABLE public.post
+(
+  id integer NOT NULL,
+  name text,
+  CONSTRAINT post_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE public.employee
+(
+  id integer NOT NULL,
+  idpost integer NOT NULL,
+  firstname character varying(30) NOT NULL,
+  secondname character varying(30) NOT NULL,
+  thirdname character varying(30),
+  floor character(1) NOT NULL,
+  birthdate text NOT NULL,
+  contactnumber character varying(30) NOT NULL,
+  email character varying(30) NOT NULL,
+  reception text,
+  layoff text,
+  salary real NOT NULL,
+  head boolean NOT NULL,
+  iddepartment integer NOT NULL,
+  CONSTRAINT employee_pkey PRIMARY KEY (id),
+  CONSTRAINT employee_iddepartment_fkey FOREIGN KEY (iddepartment)
+      REFERENCES public.department (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT employee_idpost_fkey FOREIGN KEY (idpost)
+      REFERENCES public.post (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE TABLE public.event
+(
+  id integer NOT NULL,
+  description text NOT NULL,
+  name text NOT NULL,
+  CONSTRAINT event_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE public.fund
+(
+  id integer NOT NULL,
+  salarydepartment real,
+  iddepartment integer NOT NULL,
+  CONSTRAINT fond_pkey PRIMARY KEY (id),
+  CONSTRAINT fond_iddepartment_fkey FOREIGN KEY (iddepartment)
+      REFERENCES public.department (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), null, 'Департамент 1', '2016-01-11');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), null, 'Департамент 2', '2016-01-20');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), 1, 'Департамент 3', '2016-01-25');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), 1, 'Департамент 4', '2016-01-29');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), 2, 'Департамент 5', '2016-02-11');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), 2, 'Департамент 6', '2016-02-20');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), 3, 'Департамент 7', '2016-02-24');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), 4, 'Департамент 8', '2016-02-29');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), 5, 'Департамент 9', '2016-03-11');
+
+INSERT INTO public.department(
+            id, idparentdepartment, name, datecreation)
+    VALUES (nextval('nextiddepartment'), 9, 'Департамент 10', '2016-03-20');
+
+INSERT INTO public.post(id, name)
+    VALUES (nextval('nextidpost'), 'Руководитель');
+
+INSERT INTO public.post(id, name)
+    VALUES (nextval('nextidpost'), 'Главный руководитель');
+
+INSERT INTO public.post(id, name)
+    VALUES (nextval('nextidpost'), 'Тестировщик');
+
+INSERT INTO public.post(id, name)
+    VALUES (nextval('nextidpost'), 'Системный администратор');
+
+INSERT INTO public.post(id, name)
+    VALUES (nextval('nextidpost'), 'Бугалтер');
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Иван', 'Иванов', null, 'м', '1987-03-23', 
+            '8912345678', 'example@mail.ru', '2016-11-23', null, 67876, true, 1);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 1, 'Руслан', 'Мингазов', null, 'м', '1988-03-23', 
+            '8912345678', 'example@mail.ru', '2016-11-23', null, 34234, false, 1);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 5, 'Александр', 'Тихонов', null, 'м', '1988-04-23', 
+            '8912345678', 'example@mail.ru', '2016-11-23', null, 29856, false, 1);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Каюпов', 'Анвар', null, 'м', '1988-04-21', 
+            '8912345678', 'example@mail.ru', '2016-11-23', null, 58938, true, 2);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 3, 'Печерин', 'Алексей', null, 'м', '1988-04-21', 
+            '8912345678', 'example@mail.ru', '2016-11-23', null, 32134, false, 2);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 4, 'Сергей', 'Тополин', null, 'м', '1988-04-21', 
+            '8912783678', 'example@mail.ru', '2016-11-23', null, 26878, false, 2);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 4, 'Владимер', 'Чукманов', null, 'м', '1984-04-11', 
+            '8912783678', 'example@mail.ru', '2016-11-23', null, 22323, false, 3);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Оксана', 'Малышев', null, 'ж', '1985-04-15', 
+            '8912783678', 'example@mail.ru', '2016-11-23', null, 54345, true, 3);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 1, 'Виталий', 'Супремо', null, 'м', '1985-04-15', 
+            '8912783678', 'example@mail.ru', '2016-11-23', null, 39878, false, 3);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Дмитрий', 'Уточкин', null, 'м', '1995-04-15', 
+            '8445789678', 'example@mail.ru', '2016-11-23', null, 57446, true, 4);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 3, 'Семен', 'Павлов', null, 'м', '1991-04-15', 
+            '8445789678', 'example@mail.ru', '2016-11-23', null, 23442, false, 4);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Вася', 'Пупкин', null, 'м', '1991-02-15', 
+            '8445789708', 'agent@mail.ru', '2017-11-23', null, 74533, true, 5);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Андрей', 'Демшев', null, 'м', '1997-02-15', 
+            '8445789708', 'agent01@mail.ru', '2017-12-23', null, 67323, true, 6);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 1, 'Павел', 'Осоргин', null, 'м', '1994-02-12', 
+            '8445789708', 'agent01@mail.ru', '2017-12-23', null, 45323, false, 6);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 4, 'Вячеслав', 'Винчестер', null, 'м', '1990-02-12', 
+            '8445789708', 'agent01@mail.ru', '2018-12-23', null, 32433, false, 6);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Люцифер', 'Диница', 'Око', 'м', '1990-01-12', 
+            '8445789708', 'agent11@mail.ru', '2018-05-13', null, 54234, true, 7);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 1, 'Денис', 'Сорокин', null, 'м', '1996-01-12', 
+            '8445789708', 'agentik@mail.ru', '2018-05-13', null, 28908, false, 7);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Элеанора', 'Газинуровна', null, 'ж', '1992-01-12', 
+            '8445789708', 'agentik@mail.ru', '2018-05-13', null, 44543, true, 8);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 1, 'Марсель', 'Каримов', null, 'м', '1994-01-11', 
+            '8445789708', 'postrik@mail.ru', '2018-05-13', null, 28938, false, 8);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 2, 'Сэм', 'Винчестер', null, 'м', '1994-01-11', 
+            '8445789708', 'vinchik@mail.ru', '2018-05-13', null, 56434, true, 9);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 1, 'Тирион', 'Ланестер', null, 'м', '1987-01-11', 
+            '8445789708', 'denchik@mail.ru', '2018-05-13', null, 63475, true, 10);
+
+INSERT INTO public.employee(
+            id, idpost, firstname, secondname, thirdname, floor, birthdate, 
+            contactnumber, email, reception, layoff, salary, head, iddepartment)
+    VALUES (nextval('nextidemployee'), 1, 'Денис', 'Афанасьев', null, 'м', '1987-01-11', 
+            '8445789708', 'denchik@mail.ru', '2018-05-13', null, 32143, false, 10);
+
+

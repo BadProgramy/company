@@ -59,7 +59,7 @@ public class RestControllerDepartment {
     }
 
     @RequestMapping(value = "allSubordinatedDepartments",method = RequestMethod.GET)//++
-    @ApiOperation("the departments which are under supervision of this department (all subordinated departments)")
+    @ApiOperation("The departments which are under supervision of this department (all subordinated departments)")
     public List<Department> getAllSubordinatedDepartments(int id) {
         return serviceDepartment.getAllSubordinatedDepartments(id);
     }

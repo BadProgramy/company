@@ -13,7 +13,7 @@ public class Department {
     private int id;
     @ApiParam(value = "Name department",required = true)
     private String name;
-    @ApiParam(value = "Identifier parent department",required = true)
+    @ApiParam(value = "Identifier parent department")
     private int idParentDepartment;
     //В условиях не было сказано что дату создания могли вводить сами или же берется текущая дата
     //Я сделал именно так что дату мы можем ввести сами
